@@ -2,23 +2,30 @@ import express, { RequestHandler } from 'express'
 import * as userServices from './services/user.services'
 import { randomUUID } from 'crypto'
 
-const port = 4000
+const port = 3000
 const app = express()
 
 app.use(express.json())
 app.use(express.static(__dirname + '/../public'))
 
-type user = { id: number, name: string, email: string, username: string, password: string }
-const logged: { [token: string]: user } = {}
-
-const isAlreadyLogged = (username: string) => {
-  for (const token in logged)
-    if (logged[token].username === username)
-      return token
-  return false
+type User = { 
+  name: string,
+  email: string,
+  password: string,
+  token: string
 }
 
-// Check if user is logged middleware
+const logged: {
+  [token: string]: User
+} = {};
+
+const isAlreadyLogged = (name: string) => {
+  for (const token in logged)
+    if (logged[token].name === name)
+      return token;
+  return false;
+};
+
 const middlewareLogged: RequestHandler = (req, res, next) => {
   const token = req.params.token
   if (!token)
@@ -28,24 +35,36 @@ const middlewareLogged: RequestHandler = (req, res, next) => {
   next()
 }
 
-// TOKEN CREATE :: LOGIN
-app.post("/token", async (req, res) => {
-  const { username, password } = req.body
-  const tokenAlread = isAlreadyLogged(username)
-  if (tokenAlread)
+//login
+app.post('/user', async (req, res) => {
+  const { name, password } = req.body;
+  const tokenAlread = isAlreadyLogged(name);
+  if (tokenAlread) {
     return res.status(401).json({
       error: "Usuário já está logado", 
       token: tokenAlread
-    })
-  const user = await userServices.findUserByLoginPassword(username, password)
+    });
+  }
+  const user = await userServices.findUserByLoginPassword(name, password);
   if (!user)
-    return res.status(401).json({ error: "Usuário ou senha inválidos" })
-  const token = randomUUID()
-  logged[token] = user
-  return res.json({ token })
+    return res.status(401).json({ error: "Usuário ou senha inválidos" });
+  const token = randomUUID();
+  logged[token] = { ...user, token };
+  return res.json({ token });
+});
+
+//cadastro
+app.post('/users', async (req, res) => {
+  const { name, email, password } = req.body;
+  const response = await userServices.signinUser(name, email, password);
+  if (!response){
+    return res.status(409).json({ error: "Email already exists" });
+  } else {
+    return res.json({response})
+  }
 })
 
-// TOKEN CHECK :: VALIDATE
+//validator de token
 app.get("/token/:token", (req, res) => {
   const token = req.params.token
   if (!token)
@@ -55,21 +74,45 @@ app.get("/token/:token", (req, res) => {
   return res.json({ ...logged[token], password: undefined })
 })
 
-// TOKEN DELETE :: LOGOUT
-app.delete("/token/:token", (req, res) => {
+//deletar token
+app.delete("/users/:token", (req, res) => {
+  const token = req.params.token;
+  if (!token) {
+    return res.status(401).json({ error: "Token não informado" });
+  }
+  if (!logged[token]) {
+    return res.status(401).json({ error: "Token inválido" });
+  }
+  delete logged[token];
+  return res.status(204).send();
+});
+
+//atualizar info do user
+app.put('/users/:token', middlewareLogged, async (req, res) => {
+  const { name, email, password } = req.body;
   const token = req.params.token
   if (!token)
     return res.status(401).json({ error: "Token não informado" })
   if (!logged[token])
     return res.status(401).json({ error: "Token inválido" })
-  delete logged[token]
-  return res.status(204).send()
-})
+  const user = await userServices.updateUser(name, email, password);
+  res.json(user);
+});
 
-// LISTAR USUÁRIOS SOMENTE SE ESTIVER LOGADO
 app.get("/users/:token", middlewareLogged, async (req, res) => {
   const users = await userServices.getAllUsers()
   return res.json(users)
 })
 
-app.listen(port, () => console.log(`⚡ Server is running on port ${port}`))
+app.get("/user/logged/:token", middlewareLogged, (req, res) => {
+  const token = req.params.token;
+  const user = logged[token];
+  
+  if (!user) {
+    return res.status(401).json({ error: "Usuário não encontrado" });
+  }
+  
+  return res.json({ name: user.name, email: user.email });
+});
+
+app.listen(port, () => console.log(`⚡ Server is running on port ${port}`));

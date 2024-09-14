@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="main.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <main>
+    <div class="info_div">
+      <h1>Informações do usuário logado</h1>
+      <p>Nome: <span id="user-name"></span></p>
+      <p>Email: <span id="user-email"></span></p>
+      <p>Senha: <span id="user-password"></span></p>
+      <div class="actions-container">
+        <button id="btn-dado">Atualizar dados</button>
+        <button id="deleteUserButton" data-action="delete">DELETAR</button>
+      </div>
+    </div>
+
+    <div>
+      <h1>Lista de usuários no banco de dados</h1>
+      <div id="list_users_with_name_email">
+        <!-- lista aqui -->
+      </div>
+    </div>
+  </main>
+
+</body>
+
+<script>
+  // buscar os dados do usuário logado
+  async function fetchUserData() {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Token não encontrado. Faça login novamente.');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const response = await fetch(`/user/logged/${token}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        alert('Não foi possível carregar os dados do usuário.');
+        return;
+      }
+
+      const userData = await response.json();
+      document.getElementById('user-name').textContent = userData.name;
+      document.getElementById('user-email').textContent = userData.email;
+      document.getElementById('user-password').textContent = '********';
+    } catch (error) {
+      console.error('Erro ao buscar dados do usuário:', error);
+    }
+  }
+
+  // listar outros usuários
+  async function listarUsuarios() {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/users/${token}`);
+      if (!response.ok) return false
+      const users = await response.json();
+      
+      const userListContainer = document.getElementById('list_users_with_name_email');
+      userListContainer.innerHTML = '';
+
+      users.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.className = 'user-item';
+        userDiv.innerHTML = `
+          <p>Nome: ${user.name}</p>
+          <p>Email: ${user.email}</p>
+        `;
+        userListContainer.appendChild(userDiv);
+      });
+    } catch (error) {
+      console.error('Erro ao listar usuários:', error);
+    }
+  }
+
+  // remover o modal
+  function removeModal() {
+    const modal = document.querySelector('.modal');
+    if (modal) {
+      modal.remove();
+    }
+  }
+
+  // Adicionar modal ao clicar no botão de atualizar dados
+  document.getElementById('btn-dado').addEventListener('click', () => {
+    const el = document.createElement('div');
+    el.className = 'modal';
+    el.innerHTML = `
+      <div class="input-container">
+        <label for="name">Nome</label>
+        <input type="text" name="name" required>
+      </div>
+      <div class="input-container">
+        <label for="email">Email</label>
+        <input type="email" name="email" required>
+      </div>
+      <div class="input-container">
+        <label for="password">Senha</label>
+        <input type="password" name="password" required>
+      </div>
+      <div class="actions-container">
+        <button data-action="update">Atualizar</button>
+        <button onClick="removeModal();">Cancelar</button>
+      </div>
+    `;
+    document.body.append(el);
+  });
+
+  // Função para deletar o usuário
+  document.getElementById('deleteUserButton').addEventListener('click', async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Token não encontrado. Faça login novamente.');
+      window.location.href = 'login.html';
+      return;
+    }
+
+    try {
+      const response = await fetch(`/users/${token}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        alert('Não foi possível excluir o usuário. Tente novamente.');
+      } else {
+        alert('REMOÇÃO COMPLETA 😎')
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+      }
+    } catch (error) {
+      console.error('Erro ao deletar usuário:', error);
+      alert('Ocorreu um erro. Tente novamente.');
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    fetchUserData();
+    listarUsuarios();
+  });
+</script>
+</html>
