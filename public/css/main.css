@@ -1,0 +1,312 @@
+
+* {
+	box-sizing: border-box;
+  }
+  
+  :root {
+	--primary-color: #007bff; /* Azul */
+	--secondary-color: #6c757d; /* Cinza */
+	--success-color: #28a745; /* Verde */
+	--danger-color: #dc3545; /* Vermelho */
+	--light-color: #f8f9fa; /* Branco Claro */
+	--dark-color: #343a40; /* Preto Suave */
+	--font-family: 'Arial', sans-serif;
+  }
+  
+  body {
+	font-family: var(--font-family);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0;
+	padding: 1rem;
+	min-height: 100vh;
+	background-color: var(--light-color);
+  }
+  
+  h1, h2 {
+	color: var(--dark-color);
+	text-align: center; 
+  }
+  
+  main {
+	display: flex;
+	flex-direction: column; 
+	align-items: center; 
+	gap: 1rem;
+	width: 100%;
+	max-width: 500px; 
+  }
+  
+  form {
+	background-color: #fff;
+	padding: 1.5rem;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	width: 100%;
+  }
+  
+  form .input-container {
+	margin-bottom: 1rem;
+  }
+  
+  form label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: 0.25rem;
+  }
+  
+  form input {
+	width: 100%;
+	padding: 0.6rem;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+  }
+  
+  form .actions-container {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.5rem;
+  }
+  
+	#message {
+		margin-bottom: 1rem;
+		padding: 0.75rem 1.25rem;
+		border: 1px solid transparent;
+		border-radius: 0.25rem;
+		width: 100%;
+		text-align: center;
+	}
+
+	.hidden {
+		display: none;
+	  }
+
+	  
+  #message.success {
+	color: #155724;
+	background-color: #d4edda;
+	border-color: #c3e6cb;
+  }
+  
+  #message.error {
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+  }
+  
+  
+#list_users_with_name_email {
+	display: block;
+  }
+
+
+  .actions-container {
+	margin-top: 1rem;
+	text-align: center;
+  }
+  
+  .actions-container button {
+	padding: 0.6rem 1.2rem;
+	border: none;
+	border-radius: 5px;
+	color: #fff;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	background-color: var(--primary-color);
+  }
+  
+  .actions-container button:hover {
+	background-color: var(--secondary-color);
+  }
+  
+  
+  .success-message-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+  }
+  
+  .success-message-container #message {
+	width: auto;
+  }
+  
+  .success-message-container button {
+	padding: 0.6rem 1.2rem;
+	border: none;
+	border-radius: 5px;
+	color: #fff;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	background-color: var(--primary-color);
+  }
+  
+  .success-message-container button:hover {
+	background-color: var(--secondary-color);
+  }
+  
+  .info_div {
+	padding: 2rem;
+	border-radius: 4px;
+	background-color: #ffffff;
+	border: 1px solid hsl(0, 0%, 90%);
+	width: 100%;
+	max-width: 600px;
+	margin-bottom: 2rem;
+  }
+  
+  .info_div > p {
+	margin: 0.5rem 0;
+	font-size: 1.1rem;
+  }
+  
+  .info_div > h2 {
+	margin-bottom: 1rem;
+	font-size: 1.5rem;
+  }
+  
+  .info_div div {
+	display: flex;
+	gap: 0.5rem;
+	justify-content: flex-end;
+  }
+  
+
+
+  .info_div div button {
+	flex: 1;
+	padding: 0.6rem;
+	font-weight: bold;
+	border-radius: 5px;
+	color: #fff;
+	border: none;
+	background-color: var(--primary-color);
+	text-transform: uppercase;
+	transition: background-color 0.3s ease; 
+  }
+  
+ 
+  form button[data-action="login"] {
+	background-color: var(--primary-color); 
+  }
+  form button[data-action="login"]:hover {
+	background-color: var(--secondary-color); 
+  }
+  
+  form button[data-action="create"] {
+	background-color: var(--primary-color);
+  }
+  
+  form button[data-action="create"]:hover {
+	background-color: var(--secondary-color); 
+  }
+  .info_div div button[data-action="update"] {
+	background-color: var(--primary-color);
+  }
+  
+  .info_div div button[data-action="update"]:hover {
+	background-color: var(--secondary-color);
+  }
+  
+  .info_div div button[data-action="delete"] {
+	background-color: var(--primary-color);
+  }
+  
+
+  .info_div div button[data-action="delete"]:hover {
+	background-color: var(--secondary-color);
+  }
+  
+  .user-item {
+	display: block;
+	padding: 1rem;
+	border-bottom: 1px solid #ccc;
+	word-wrap: break-word; 
+	overflow-wrap: break-word; 
+	word-break: break-word; 
+	white-space: normal;
+  }
+  
+  .user-item:last-child {
+	border-bottom: none;
+  }
+  .modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+  }
+  
+  .modal form {
+	background-color: #fff;
+	padding: 2rem;
+	border-radius: 5px;
+	width: 90%;
+	max-width: 500px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  
+  form button[data-action="create"]:hover,
+  form button[data-action="update"]:hover,
+  form button[data-action="delete"]:hover,
+  form button[data-action="cancel"]:hover {
+	opacity: 0.9; 
+  }
+  
+  form button {
+	padding: 0.6rem 1.2rem;
+	border: none;
+	border-radius: 5px;
+	color: #fff;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+  }
+  
+  form button[data-action="cancel"] {
+	background-color: var(--danger-color);
+  }
+  
+  form button[data-action="update"] {
+	background-color: var(--primary-color);
+  }
+  
+  form button[data-action="delete"] {
+	background-color: var(--primary-color);
+  }
+  
+  form button[data-action="create"] {
+	background-color: var(--primary-color); 
+  }
+  
+  @media (max-width: 600px) {
+	form, .info_div {
+	  width: 90%;
+	}
+  }
+  
+  .actions-container button:hover {
+	background-color: var(--secondary-color);
+	opacity: 0.9;
+  }
+  
+  #logoutButton {
+	background-color: var(--danger-color); 
+  }
+  
+  #logoutButton:hover {
+	background-color: var(--secondary-color); 
+	opacity: 0.9;
+  }
+  

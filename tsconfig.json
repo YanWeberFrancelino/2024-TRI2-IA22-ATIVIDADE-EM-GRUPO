@@ -5,6 +5,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
       "*": ["node_modules/*", "src/services/*"]

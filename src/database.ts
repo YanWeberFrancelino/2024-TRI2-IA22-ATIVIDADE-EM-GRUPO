@@ -1,29 +1,27 @@
-import { open, Database } from 'sqlite'
-import { Database as driver } from "sqlite3"
+import { open, Database } from 'sqlite';
+import { Database as SQLite3Database } from "sqlite3";
 
-let instance: Database | null = null
+let instance: Database<SQLite3Database> | null = null;
 
-const filename = "./database.sqlite"
+const filename = "./database.sqlite";
 
-export const database = async () => {
+export const database = async (): Promise<Database<SQLite3Database>> => {
   if (instance) 
-    return instance
+    return instance;
 
-  const db =
-    await open({ filename, driver })
+  const db = await open({ filename, driver: SQLite3Database });
 
-  
   await db.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
-      email TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
       password TEXT NOT NULL
     )
-  `)
+  `);
 
-  instance = db
-  return db
+  instance = db;
+  return db;
 }
 
-database()
+database();
