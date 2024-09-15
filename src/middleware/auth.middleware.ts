@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'o_lula_e_mito_based_sigma';
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 interface AuthenticatedRequest extends Request {
   user?: any;
