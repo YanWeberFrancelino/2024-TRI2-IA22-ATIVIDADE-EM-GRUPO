@@ -4,7 +4,7 @@
 
 O projeto **Autenticação de Usuários (Single Server)** é uma aplicação web desenvolvida pela turma **IA22** do curso de Informática, composta pelos alunos **Yan Weber Francelino**, **Nícolas Ferreira dos Santos**, **Ronald Wislley do Nascimento Santos**, **Marcos Domainski Junior** e **Eduardo Minosso de Oliveira**, sob orientação do professor **Daniel de Andrade Varela**.
 
-Este sistema implementa um completo processo de autenticação e gerenciamento de usuários utilizando **JWT (JSON Web Tokens)**. Além disso, oferece funcionalidades de CRUD (Criar, Ler, Atualizar e Deletar) para gerenciamento seguro e eficiente das informações dos usuários.
+Este sistema implementa um processo de autenticação e gerenciamento de usuários utilizando **JWT (JSON Web Tokens)**. Além disso, oferece funcionalidades de CRUD (Criar, Ler, Atualizar e Deletar) para gerenciamento das informações dos usuários.
 
 Ideal para aplicações que requerem controle de acesso e gerenciamento de dados de usuários em um ambiente de servidor único.
 
